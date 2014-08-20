@@ -6,19 +6,25 @@ class Commute
   end
 
   def to_hash
-    first_row = csv.first
+    csv.each_with_object({}) do |row, hash| 
+      key = row["Person"]
 
+      hash[key] ||= []
+
+      hash[key].push(build_row(row))
+    end
+  end
+
+  private
+
+  def build_row(row)
     {
-      first_row["Person"] => [
-                              {
-                                :week => first_row["Week"].to_i,
-                                :day => first_row["Day"],
-                                :mode => first_row["Mode"],
-                                :inbound => first_row["Inbound"],
-                                :outbound => first_row["Outbound"],
-                                :distance => first_row["Distance"],
-                              }
-                             ]
+      :week => row["Week"].to_i,
+      :day => row["Day"],
+      :mode => row["Mode"],
+      :inbound => row["Inbound"],
+      :outbound => row["Outbound"],
+      :distance => row["Distance"]
     }
   end
 end
