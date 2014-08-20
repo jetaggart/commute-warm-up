@@ -6,7 +6,7 @@ class Commute
   end
 
   def to_hash
-    convert_to_hash.each_with_object({}) do |(key, val), hash|
+    group_by_person.each_with_object({}) do |(key, val), hash|
       sorted_by_week = val.group_by { |a| a[:week] }.sort
 
       sorted_by_week_and_day = sorted_by_week.flat_map do |week| 
@@ -31,7 +31,7 @@ class Commute
     }[day]
   end
 
-  def convert_to_hash
+  def group_by_person
     csv.each_with_object({}) do |row, hash| 
       key = row["Person"]
 
